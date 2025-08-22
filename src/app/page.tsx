@@ -1,10 +1,10 @@
-import Layout from '../components/layout/layout';
 import WelcomeCard from '../components/dashboard/WelcomeCard';
 import StatsCard from '../components/dashboard/StatsCard';
 import BrowserStats from '../components/dashboard/BrowserStats';
 import ProjectBudgetChart from '../components/dashboard/ProjectBudgetChart';
 import RecentCustomers from '../components/dashboard/RecentCustomers';
 import TasksList from '../components/dashboard/TasksList';
+import Footer from '../components/layout/Footer';
 import { ShoppingBag, DollarSign, ExternalLink, CreditCard } from 'lucide-react';
 
 export default function Dashboard() {
@@ -44,7 +44,8 @@ export default function Dashboard() {
   ];
 
   return (
-    <Layout>
+
+    <>
       {/* Breadcrumb */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <div>
@@ -97,7 +98,10 @@ export default function Dashboard() {
         
         {/* Tasks List */}
         <TasksList />
+
+        {/* Footer */}
+        <Footer />
       </div>
-    </Layout>
+    </>
   );
 }

@@ -4,9 +4,7 @@ import { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import Switcher from "./Switcher";
-import Loader from '../common/Loader';
-import { ThemeProvider } from '../common/ThemeContext';
+// import Loader from '../common/Loader';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,23 +30,17 @@ function MainLayout({ children }: LayoutProps) {
           </div>
         </main>
         
-        {/* Footer */}
-        <Footer />
-      </div>
-      
-      {/* Switcher */}
-      <Switcher />
+        
+      </div>    
       
       {/* Loader */}
-      <Loader />
+      {/* <Loader /> */}
     </div>
   );
 }
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <ThemeProvider>
-      <MainLayout>{children}</MainLayout>
-    </ThemeProvider>
+    <MainLayout>{children}</MainLayout>
   );
 }
