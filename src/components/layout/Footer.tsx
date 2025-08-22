@@ -1,16 +1,23 @@
-export default function Footer() {
+import React from 'react';
+
+const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="relative bg-gradient-to-b from-[#0f172a] to-[#131b2d] text-gray-300 py-4 border-t border-gray-700 overflow-hidden">
-      <div className="container mx-auto px-4 flex justify-center items-center min-h-[80px]">
-        {/* Copyright text with subtle animation - centered */}
-        <div className="text-center">
-          <p className="text-sm md:text-base transition-all duration-500 hover:text-purple-400 transform hover:scale-105 inline-block">
-            © 2025 Alfiansyah Bima. Designed with <span className="text-purple-500 animate-pulse">♥</span> by 
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-500 font-semibold transition-all duration-300 hover:from-pink-500 hover:to-purple-500"> αzυre project ♪</span>. 
-            All rights reserved.
-          </p>
-        </div>
+    <footer className="footer mt-auto py-3 bg-white text-center">
+      <div className="container">
+        <span>
+          Copyright © <span id="year">{currentYear}</span>{' '}
+          <a href="javascript:void(0);" className="text-primary">Bima</a>.
+          Designed with <span className="bi bi-heart-fill text-danger"></span> by{' '}
+          <a href="javascript:void(0);">
+            <span className="fw-semibold text-decoration-underline"></span>
+          </a>{' '}
+          All rights reserved
+        </span>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

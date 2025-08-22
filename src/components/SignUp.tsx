@@ -36,7 +36,7 @@ export default function SignUp() {
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md z-10">
         <div className="flex justify-center mb-6">
           <Image 
-            src="/assets/images/brand-logos/toggle-logo.png" 
+            src="../public/assets/images/brand-logos/toggle-logo.png" 
             alt="logo" 
             width={40} 
             height={40} 

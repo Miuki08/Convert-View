@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { 
   Home, Calendar, Users, Image as ImageIcon, AlertCircle, Bell, 
   FolderTree, Folder, FileText, Layers, Settings, 
@@ -82,7 +84,7 @@ const menuItems: MenuItem[] = [
 ];
 
 export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
-  const router = useRouter();
+  const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
 
   const toggleMenu = (title: string) => {
@@ -95,7 +97,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
   // Auto-open menu when a child is active
   const isChildActive = (children: MenuItem[] = []) => {
-    return children.some(child => router.pathname === child.path);
+    return children.some(child => pathname === child.path);
   };
 
   return (
@@ -134,10 +136,10 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           </button>
         </div>
         
-        <div className="h-full overflow-y-auto pb-16"> {/* Added padding for user profile */}
+        <div className="h-full overflow-y-auto pb-16">
           <nav className="px-4 py-6">
             {menuItems.map((item, index) => {
-              const isActive = router.pathname === item.path || isChildActive(item.children);
+              const isActive = pathname === item.path || isChildActive(item.children);
               
               return (
                 <div key={index} className="mb-2">
@@ -174,7 +176,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                                 key={childIndex}
                                 href={child.path || '#'}
                                 className={`flex items-center p-2 text-sm rounded-lg transition-colors ${
-                                  router.pathname === child.path
+                                  pathname === child.path
                                     ? 'bg-blue-100 text-blue-600'
                                     : 'text-gray-600 hover:bg-gray-100'
                                 }`}

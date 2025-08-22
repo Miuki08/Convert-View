@@ -1,19 +1,22 @@
+"use client";
+
 import { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import Switcher from 'switcher';
-import Loader from '@/common/Loader';
+import Switcher from "./Switcher";
+import Loader from '../common/Loader';
+import { ThemeProvider } from '../common/ThemeContext';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+function MainLayout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       
@@ -39,5 +42,13 @@ export default function Layout({ children }: LayoutProps) {
       {/* Loader */}
       <Loader />
     </div>
+  );
+}
+
+export default function Layout({ children }: LayoutProps) {
+  return (
+    <ThemeProvider>
+      <MainLayout>{children}</MainLayout>
+    </ThemeProvider>
   );
 }
