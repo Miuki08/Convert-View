@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import Footer from './Footer';
-// import Loader from '../common/Loader';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,29 +10,64 @@ interface LayoutProps {
 
 function MainLayout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [navigationStyle, setNavigationStyle] = useState('light');
+
+  // Load saved preferences from localStorage
+  useEffect(() => {
+    const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+    const savedNavStyle = localStorage.getItem('navigationStyle');
+    
+    if (savedCollapsed) {
+      setIsSidebarCollapsed(savedCollapsed === 'true');
+    }
+    
+    if (savedNavStyle) {
+      setNavigationStyle(savedNavStyle);
+    }
+  }, []);
+
+  // Save preferences to localStorage
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.toString());
+  }, [isSidebarCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem('navigationStyle', navigationStyle);
+  }, [navigationStyle]);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        setIsOpen={setSidebarOpen} 
+        isCollapsed={isSidebarCollapsed}
+        navigationStyle={navigationStyle}
+      />
       
-      {/* Main content */}
+      {/* Main content - HAPUS margin/margin-left yang menyebabkan gap */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <Header setSidebarOpen={setSidebarOpen} />
+        <Header 
+          setSidebarOpen={setSidebarOpen} 
+          toggleSidebar={toggleSidebar}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onNavigationStyleChange={setNavigationStyle}
+          currentNavigationStyle={navigationStyle}
+        />
         
-        {/* Main content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto">
-          <div className="container mx-auto px-4 py-6">
+        {/* Main content - HAPUS padding/margin yang berlebihan */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-0">
+          <div className="w-full h-full">
             {children}
           </div>
         </main>
-        
-        
       </div>    
-      
-      {/* Loader */}
-      {/* <Loader /> */}
     </div>
   );
 }

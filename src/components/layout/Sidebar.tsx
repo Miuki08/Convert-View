@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -14,6 +14,8 @@ import {
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  isCollapsed: boolean;
+  navigationStyle: string;
 }
 
 interface MenuItem {
@@ -83,9 +85,15 @@ const menuItems: MenuItem[] = [
   }
 ];
 
-export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
+export default function Sidebar({ isOpen, setIsOpen, isCollapsed, navigationStyle }: SidebarProps) {
   const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Fix hydration issue by waiting for component to mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const toggleMenu = (title: string) => {
     if (openMenus.includes(title)) {
@@ -100,6 +108,69 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     return children.some(child => pathname === child.path);
   };
 
+  // Don't render anything during SSR to avoid hydration mismatch
+  if (!isMounted) {
+    return (
+      <div className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg lg:static lg:inset-0 ${isCollapsed ? 'lg:w-16' : 'lg:w-64'}`} />
+    );
+  }
+
+  const getSidebarClasses = () => {
+    const baseClasses = `
+      fixed inset-y-0 left-0 z-30 transition-all duration-300 ease-in-out
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+      lg:translate-x-0 lg:static lg:inset-0
+      ${isCollapsed ? 'w-16' : 'w-64'}
+    `;
+    
+    const styleClasses = 
+      navigationStyle === 'dark' ? 'bg-gray-800' : 
+      navigationStyle === 'primary' ? 'bg-blue-600' : 
+      navigationStyle === 'gradient' ? 'bg-gradient-to-b from-blue-400 to-purple-500' : 
+      navigationStyle === 'transparent' ? 'bg-transparent' : 'bg-white';
+    
+    return `${baseClasses} ${styleClasses}`;
+  };
+
+  const getHeaderClasses = () => {
+    const baseClasses = 'flex items-center justify-between h-16 px-4 border-b';
+    
+    const styleClasses = 
+      navigationStyle === 'dark' ? 'border-gray-700 bg-gray-800' : 
+      navigationStyle === 'primary' ? 'border-blue-700 bg-blue-600' : 
+      navigationStyle === 'gradient' ? 'border-blue-300/30 bg-transparent' : 
+      navigationStyle === 'transparent' ? 'border-gray-200/30 bg-transparent' : 
+      'border-gray-200 bg-white';
+    
+    return `${baseClasses} ${styleClasses}`;
+  };
+
+  const getTextColor = () => {
+    return navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+      ? 'text-gray-200' : 'text-gray-700';
+  };
+
+  const getHoverBg = () => {
+    return navigationStyle === 'dark' ? 'hover:bg-gray-700' : 
+      navigationStyle === 'primary' ? 'hover:bg-blue-700' : 
+      navigationStyle === 'gradient' ? 'hover:bg-white/10' : 
+      navigationStyle === 'transparent' ? 'hover:bg-gray-100/30' : 
+      'hover:bg-gray-100';
+  };
+
+  const getActiveClasses = () => {
+    const baseClasses = navigationStyle === 'dark' ? 'bg-gray-700' : 
+      navigationStyle === 'primary' ? 'bg-blue-700' : 
+      navigationStyle === 'gradient' ? 'bg-white/10' : 
+      navigationStyle === 'transparent' ? 'bg-gray-100/30' : 
+      'bg-blue-50';
+    
+    const textClasses = navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+      ? 'text-white' : 'text-blue-600';
+    
+    return `${baseClasses} ${textClasses}`;
+  };
+
   return (
     <>
       {/* Overlay for mobile */}
@@ -111,35 +182,40 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
       )}
       
       {/* Sidebar */}
-      <div className={`
-        fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0
-      `}>
-        <div className="flex items-center justify-between h-16 px-4 bg-white border-b">
-          <Link href="/" className="flex items-center">
-            <Image 
-              src="/brand-logos/desktop-logo.png" 
-              alt="Logo" 
-              width={32} 
-              height={32} 
-              className="h-8 w-auto"
-            />
-            <span className="ml-2 text-xl font-bold text-blue-600">YourApp</span>
-          </Link>
-          <button 
-            className="lg:hidden text-gray-500 hover:text-gray-700"
-            onClick={() => setIsOpen(false)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+      <div className={getSidebarClasses()}>
+        <div className={getHeaderClasses()}>
+          {!isCollapsed && (
+            <Link href="/" className="flex items-center">
+              <Image 
+                src="/brand-logos/desktop-logo.png" 
+                alt="Logo" 
+                width={32} 
+                height={32} 
+                className="h-8 w-auto"
+              />
+              <span className={`ml-2 text-xl font-bold ${
+                navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+                ? 'text-white' : 'text-blue-600'
+              }`}>YourApp</span>
+            </Link>
+          )}
+          {!isCollapsed && (
+            <button 
+              className="lg:hidden text-gray-500 hover:text-gray-700"
+              onClick={() => setIsOpen(false)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
         
         <div className="h-full overflow-y-auto pb-16">
-          <nav className="px-4 py-6">
+          <nav className={isCollapsed ? "px-2 py-6" : "px-4 py-6"}>
             {menuItems.map((item, index) => {
               const isActive = pathname === item.path || isChildActive(item.children);
+              const IconComponent = item.icon;
               
               return (
                 <div key={index} className="mb-2">
@@ -148,26 +224,30 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                       <button
                         className={`flex items-center w-full p-2 rounded-lg transition-colors ${
                           openMenus.includes(item.title) || isActive
-                            ? 'bg-blue-50 text-blue-600' 
-                            : 'text-gray-700 hover:bg-gray-100'
+                            ? getActiveClasses()
+                            : `${getTextColor()} ${getHoverBg()}`
                         }`}
                         onClick={() => toggleMenu(item.title)}
                       >
-                        <item.icon className="w-5 h-5 mr-3" />
-                        <span className="flex-1 text-left">{item.title}</span>
-                        <svg 
-                          className={`w-4 h-4 transition-transform ${
-                            openMenus.includes(item.title) ? 'rotate-90' : ''
-                          }`} 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <IconComponent className={isCollapsed ? "w-5 h-5" : "w-5 h-5 mr-3"} />
+                        {!isCollapsed && (
+                          <>
+                            <span className="flex-1 text-left">{item.title}</span>
+                            <svg 
+                              className={`w-4 h-4 transition-transform ${
+                                openMenus.includes(item.title) ? 'rotate-90' : ''
+                              }`} 
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </>
+                        )}
                       </button>
                       
-                      {openMenus.includes(item.title) && (
+                      {openMenus.includes(item.title) && !isCollapsed && (
                         <div className="pl-9 mt-1 space-y-1">
                           {item.children.map((child, childIndex) => {
                             const ChildIcon = child.icon;
@@ -177,8 +257,8 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                                 href={child.path || '#'}
                                 className={`flex items-center p-2 text-sm rounded-lg transition-colors ${
                                   pathname === child.path
-                                    ? 'bg-blue-100 text-blue-600'
-                                    : 'text-gray-600 hover:bg-gray-100'
+                                    ? getActiveClasses()
+                                    : `${getTextColor()} ${getHoverBg()}`
                                 }`}
                                 onClick={() => setIsOpen(false)}
                               >
@@ -195,13 +275,13 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                       href={item.path || '#'}
                       className={`flex items-center p-2 rounded-lg transition-colors ${
                         isActive
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? getActiveClasses()
+                          : `${getTextColor()} ${getHoverBg()}`
                       }`}
                       onClick={() => setIsOpen(false)}
                     >
-                      <item.icon className="w-5 h-5 mr-3" />
-                      <span>{item.title}</span>
+                      <IconComponent className={isCollapsed ? "w-5 h-5" : "w-5 h-5 mr-3"} />
+                      {!isCollapsed && <span>{item.title}</span>}
                     </Link>
                   )}
                 </div>
@@ -210,24 +290,41 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           </nav>
           
           {/* User profile section at bottom */}
-          <div className="fixed bottom-0 left-0 w-64 p-4 border-t bg-white">
-            <div className="flex items-center">
-              <Image 
-                src="/images/faces/2.jpg" 
-                alt="User" 
-                width={40} 
-                height={40} 
-                className="rounded-full" 
-              />
-              <div className="ml-3">
-                <p className="text-sm font-medium">Ashton Cox</p>
-                <p className="text-xs text-gray-500">Web Developer</p>
+          {!isCollapsed && (
+            <div className={`fixed bottom-0 left-0 w-64 p-4 border-t ${
+              navigationStyle === 'dark' ? 'bg-gray-800 border-gray-700' : 
+              navigationStyle === 'primary' ? 'bg-blue-600 border-blue-700' : 
+              navigationStyle === 'gradient' ? 'bg-transparent border-white/20' : 
+              navigationStyle === 'transparent' ? 'bg-transparent border-gray-200/30' : 
+              'bg-white border-gray-200'
+            }`}>
+              <div className="flex items-center">
+                <Image 
+                  src="/images/faces/2.jpg" 
+                  alt="User" 
+                  width={40} 
+                  height={40} 
+                  className="rounded-full" 
+                />
+                <div className="ml-3">
+                  <p className={`text-sm font-medium ${
+                    navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+                    ? 'text-white' : 'text-gray-800'
+                  }`}>Ashton Cox</p>
+                  <p className={`text-xs ${
+                    navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+                    ? 'text-gray-300' : 'text-gray-500'
+                  }`}>Web Developer</p>
+                </div>
+                <button className={`ml-auto ${
+                  navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
+                  ? 'text-gray-300 hover:text-white' : 'text-gray-400 hover:text-gray-600'
+                }`}>
+                  <Settings className="w-4 h-4" />
+                </button>
               </div>
-              <button className="ml-auto text-gray-400 hover:text-gray-600">
-                <Settings className="w-4 h-4" />
-              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

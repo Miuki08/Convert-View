@@ -13,9 +13,19 @@ import {
 
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+  isSidebarCollapsed: boolean;
+  onNavigationStyleChange: (style: string) => void;
+  currentNavigationStyle: string;
 }
 
-export default function Header({ setSidebarOpen }: HeaderProps) {
+export default function Header({ 
+  setSidebarOpen, 
+  toggleSidebar, 
+  isSidebarCollapsed,
+  onNavigationStyleChange,
+  currentNavigationStyle 
+}: HeaderProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -101,7 +111,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
 
   return (
     <ThemeProvider>
-        <header className="bg-white dark:bg-gray-800 shadow-sm z-10 sticky top-0 transition-colors duration-300">
+        <header className="bg-white shadow-sm z-10 sticky top-0 transition-colors duration-300">
           <div className="flex items-center justify-between h-16 px-4">
             {/* Left section */}
             <div className="flex items-center">
@@ -125,13 +135,30 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 </Link>
               </div>
               
-              {/* Sidebar toggle */}
+              {/* Sidebar toggle for mobile */}
               <button 
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 lg:hidden mr-3"
+                className="text-gray-500 hover:text-gray-600 lg:hidden mr-3"
                 onClick={() => setSidebarOpen(true)}
               >
                 <span className="sr-only">Open sidebar</span>
                 <Menu className="w-6 h-6" />
+              </button>
+
+              {/* Tombol toggle sidebar - desktop */}
+              <button 
+                className="text-gray-500 hover:text-gray-600 p-1 hidden md:block ml-2"
+                onClick={toggleSidebar}
+                aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {isSidebarCollapsed ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                  </svg>
+                )}
               </button>
 
               {/* Search bar - desktop */}
@@ -140,9 +167,9 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                   <input 
                     type="text" 
                     placeholder="Search..." 
-                    className="w-64 pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-64 pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                   />
-                  <button className="absolute right-3 top-2.5 text-gray-400 dark:text-gray-300">
+                  <button className="absolute right-3 top-2.5 text-gray-400">
                     <Search className="h-5 w-5" />
                   </button>
                 </div>
@@ -153,7 +180,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
             <div className="flex items-center space-x-3">
               {/* Search icon for mobile */}
               <button 
-                className="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="md:hidden text-gray-500 hover:text-gray-600"
                 onClick={() => setSearchOpen(!searchOpen)}
               >
                 <Search className="h-5 w-5" />
@@ -162,18 +189,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Mobile search overlay */}
               {searchOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-                  <div className="bg-white dark:bg-gray-800 p-4">
+                  <div className="bg-white p-4">
                     <div className="flex items-center">
                       <div className="relative flex-1">
                         <input 
                           type="text" 
                           placeholder="Search..." 
-                          className="w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                          className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
                         />
-                        <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 dark:text-gray-300" />
+                        <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
                       </div>
                       <button 
-                        className="ml-2 text-gray-500 dark:text-gray-400"
+                        className="ml-2 text-gray-500"
                         onClick={() => setSearchOpen(false)}
                       >
                         <X className="h-6 w-6" />
@@ -186,7 +213,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Language selector */}
               <div className="relative language-menu">
                 <button 
-                  className="flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                  className="flex items-center text-gray-500 hover:text-gray-600 p-1"
                   onClick={() => setLanguageOpen(!languageOpen)}
                 >
                   <Image 
@@ -200,12 +227,12 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 
                 {/* Language dropdown */}
                 {languageOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="px-4 py-2 border-b dark:border-gray-700">
-                      <h3 className="text-sm font-semibold dark:text-white">Select Language</h3>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-200">
+                    <div className="px-4 py-2 border-b">
+                      <h3 className="text-sm font-semibold text-gray-800">Select Language</h3>
                     </div>
                     <div className="py-1">
-                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <Image 
                           src="/assets/images/flags/us_flag.jpg" 
                           alt="English" 
@@ -215,7 +242,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                         />
                         English
                       </button>
-                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <Image 
                           src="/assets/images/flags/spain_flag.jpg" 
                           alt="Spanish" 
@@ -225,7 +252,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                         />
                         Spanish
                       </button>
-                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <Image 
                           src="/assets/images/flags/french_flag.jpg" 
                           alt="French" 
@@ -242,7 +269,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
 
               {/* Dark mode toggle */}
               <button
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                className="text-gray-500 hover:text-gray-600 p-1"
                 onClick={toggleTheme}
                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
               >
@@ -252,7 +279,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Shopping cart */}
               <div className="relative cart-menu">
                 <button 
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 relative"
+                  className="text-gray-500 hover:text-gray-600 p-1 relative"
                   onClick={() => setCartOpen(!cartOpen)}
                 >
                   <ShoppingCart className="h-5 w-5" />
@@ -263,18 +290,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 
                 {/* Cart dropdown */}
                 {cartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="p-3 border-b dark:border-gray-700">
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+                    <div className="p-3 border-b">
                       <div className="flex justify-between items-center">
-                        <h3 className="font-semibold dark:text-white">Shopping Cart</h3>
-                        <span className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs px-2 py-1 rounded">
+                        <h3 className="font-semibold text-gray-800">Shopping Cart</h3>
+                        <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">
                           5 Items
                         </span>
                       </div>
                     </div>
                     <div className="max-h-96 overflow-y-auto p-2">
                       {/* Cart items */}
-                      <div className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
+                      <div className="flex items-center p-2 hover:bg-gray-50 rounded">
                         <Image 
                           src="/assets/images/ecommerce/19.jpg" 
                           alt="Lence Camera" 
@@ -283,15 +310,15 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                           height={48}
                         />
                         <div className="ml-3 flex-1">
-                          <p className="text-sm font-medium dark:text-white">Lence Camera</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-300">1 × $189.00</p>
+                          <p className="text-sm font-medium text-gray-800">Lence Camera</p>
+                          <p className="text-xs text-gray-500">1 × $189.00</p>
                         </div>
                         <button className="text-red-500 hover:text-red-700">
                           <X className="h-4 w-4" />
                         </button>
                       </div>
                       
-                      <div className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
+                      <div className="flex items-center p-2 hover:bg-gray-50 rounded">
                         <Image 
                           src="/assets/images/ecommerce/16.jpg" 
                           alt="White Earbuds" 
@@ -300,18 +327,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                           height={48}
                         />
                         <div className="ml-3 flex-1">
-                          <p className="text-sm font-medium dark:text-white">White Earbuds</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-300">3 × $59.00</p>
+                          <p className="text-sm font-medium text-gray-800">White Earbuds</p>
+                          <p className="text-xs text-gray-500">3 × $59.00</p>
                         </div>
                         <button className="text-red-500 hover:text-red-700">
                           <X className="h-4 w-4" />
                         </button>
                       </div>
                     </div>
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border-t dark:border-gray-700">
+                    <div className="p-3 bg-blue-50 border-t">
                       <div className="flex justify-between mb-2">
-                        <span className="font-medium dark:text-white">Sub Total:</span>
-                        <span className="font-medium dark:text-white">$485.93</span>
+                        <span className="font-medium text-gray-800">Sub Total:</span>
+                        <span className="font-medium text-gray-800">$485.93</span>
                       </div>
                       <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm">
                         Checkout
@@ -324,7 +351,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Notifications */}
               <div className="relative notifications-menu">
                 <button 
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 relative"
+                  className="text-gray-500 hover:text-gray-600 p-1 relative"
                   onClick={() => setNotificationsOpen(!notificationsOpen)}
                 >
                   <Bell className="h-5 w-5" />
@@ -335,18 +362,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 
                 {/* Notifications dropdown */}
                 {notificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="p-3 border-b dark:border-gray-700">
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+                    <div className="p-3 border-b">
                       <div className="flex justify-between items-center">
-                        <h3 className="font-semibold dark:text-white">Notifications</h3>
-                        <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded">
+                        <h3 className="font-semibold text-gray-800">Notifications</h3>
+                        <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
                           6 Unread
                         </span>
                       </div>
                     </div>
                     <div className="max-h-96 overflow-y-auto">
                       {/* Notification items */}
-                      <div className="p-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <div className="p-3 border-b hover:bg-gray-50">
                         <div className="flex">
                           <div className="mr-3">
                             <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center">
@@ -354,18 +381,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                             </div>
                           </div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium dark:text-white">
+                            <p className="text-sm font-medium text-gray-800">
                               <Link href="#" className="hover:underline">New Files available</Link>
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">10 hours ago</p>
+                            <p className="text-xs text-gray-500">10 hours ago</p>
                           </div>
-                          <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                          <button className="text-gray-400 hover:text-gray-600">
                             <X className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
                       
-                      <div className="p-3 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                      <div className="p-3 border-b hover:bg-gray-50">
                         <div className="flex">
                           <div className="mr-3">
                             <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center">
@@ -373,19 +400,19 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                             </div>
                           </div>
                           <div className="flex-1">
-                            <p className="text-sm font-medium dark:text-white">
+                            <p className="text-sm font-medium text-gray-800">
                               <Link href="#" className="hover:underline">Updates available</Link>
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">2 days ago</p>
+                            <p className="text-xs text-gray-500">2 days ago</p>
                           </div>
-                          <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                          <button className="text-gray-400 hover:text-gray-600">
                             <X className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
                     </div>
-                    <div className="p-3 border-t dark:border-gray-700">
-                      <button className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 text-sm">
+                    <div className="p-3 border-t">
+                      <button className="w-full bg-gray-100 text-gray-800 py-2 rounded-lg hover:bg-gray-200 text-sm">
                         View All Notifications
                       </button>
                     </div>
@@ -396,7 +423,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Apps */}
               <div className="relative apps-menu hidden md:block">
                 <button 
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                  className="text-gray-500 hover:text-gray-600 p-1"
                   onClick={() => setAppsOpen(!appsOpen)}
                 >
                   <Grid className="h-5 w-5" />
@@ -404,14 +431,14 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 
                 {/* Apps dropdown */}
                 {appsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="p-3 border-b dark:border-gray-700">
-                      <h3 className="font-semibold dark:text-white">Related Apps</h3>
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+                    <div className="p-3 border-b">
+                      <h3 className="font-semibold text-gray-800">Related Apps</h3>
                     </div>
                     <div className="p-3">
                       <div className="grid grid-cols-3 gap-2">
                         {/* App items */}
-                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100">
                           <Image 
                             src="/assets/images/apps/figma.png" 
                             alt="Figma" 
@@ -419,9 +446,9 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                             width={40}
                             height={40}
                           />
-                          <span className="text-xs mt-2 dark:text-white">Figma</span>
+                          <span className="text-xs mt-2 text-gray-700">Figma</span>
                         </Link>
-                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100">
                           <Image 
                             src="/assets/images/apps/microsoft-powerpoint.png" 
                             alt="PowerPoint" 
@@ -429,9 +456,9 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                             width={40}
                             height={40}
                           />
-                          <span className="text-xs mt-2 dark:text-white">PowerPoint</span>
+                          <span className="text-xs mt-2 text-gray-700">PowerPoint</span>
                         </Link>
-                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <Link href="#" className="flex flex-col items-center p-3 rounded-lg hover:bg-gray-100">
                           <Image 
                             src="/assets/images/apps/microsoft-word.png" 
                             alt="Word" 
@@ -439,11 +466,11 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                             width={40}
                             height={40}
                           />
-                          <span className="text-xs mt-2 dark:text-white">MS Word</span>
+                          <span className="text-xs mt-2 text-gray-700">MS Word</span>
                         </Link>
                       </div>
                     </div>
-                    <div className="p-3 border-t dark:border-gray-700">
+                    <div className="p-3 border-t">
                       <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm">
                         View All Apps
                       </button>
@@ -454,34 +481,22 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
 
               {/* Fullscreen */}
               <button 
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                className="text-gray-500 hover:text-gray-600 p-1"
                 onClick={toggleFullscreen}
               >
                 {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
               </button>
 
-              {/* Sidebar toggle for desktop */}
-              <button 
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 hidden md:block"
-                onClick={() => setSidebarOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </button>
-
               {/* Theme switcher */}
-              <a 
-                href="#" 
-                className="header-link switcher-icon" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsSwitcherOpen(true);
-                }}
+              <button 
+                className="text-gray-500 hover:text-gray-600 p-1"
+                onClick={() => setIsSwitcherOpen(!isSwitcherOpen)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="header-link-icon" width="24" height="24" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z"/>
                   <path d="m2.845 16.136 1 1.73c.531.917 1.809 1.261 2.73.73l.529-.306A8.1 8.1 0 0 0 9 19.402V20c0 1.103.897 2 2 2h2c1.103 0 2-.897 2-2v-.598a8.132 8.132 0 0 0 1.896-1.111l.529.306c.923.530 2.198.188 2.731-.731l.999-1.729a2.001 2.001 0 0 0-.731-2.732l-.505-.292a7.718 7.718 0 0 0 0-2.224l.505-.292a2.002 2.002 0 0 0 .731-2.732l-.999-1.729c-.531-.92-1.808-1.265-2.731-.732l-.529.306A8.1 8.1 0 0 0 15 4.598V4c0-1.103-.897-2-2-2h-2c-1.103 0-2 .897-2 2v.598a8.132 8.132 0 0 0-1.896 1.111l-.529-.306c-.924-.531-2.2-.187-2.731.732l-.999 1.729a2.001 2.001 0 0 0 .731 2.732l.505.292a7.683 7.683 0 0 0 0 2.223l-.505.292a2.003 2.003 0 0 0-.731 2.733z"/>
                 </svg>
-              </a>
+              </button>
 
               {/* User menu */}
               <div className="relative user-menu">
@@ -497,36 +512,36 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                     height={32}
                   />
                   <div className="hidden xl:block text-left">
-                    <p className="text-sm font-semibold dark:text-white">Ashton Cox</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-300">Web Developer</p>
+                    <p className="text-sm font-semibold text-gray-800">Ashton Cox</p>
+                    <p className="text-xs text-gray-500">Web Developer</p>
                   </div>
                 </button>
 
                 {/* User dropdown */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <User className="h-4 w-4 mr-2" />
                       Profile
                     </Link>
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Chat
                     </Link>
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <Mail className="h-4 w-4 mr-2" />
-                      Inbox <span className="ml-auto bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-0.5 rounded">25</span>
+                      Inbox <span className="ml-auto bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded">25</span>
                     </Link>
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Messages
                     </Link>
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <Settings className="h-4 w-4 mr-2" />
                       Settings
                     </Link>
-                    <div className="border-t my-1 dark:border-gray-700"></div>
-                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <div className="border-t my-1"></div>
+                    <Link href="#" className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                       <LogOut className="h-4 w-4 mr-2" />
                       Sign Out
                     </Link>
@@ -540,6 +555,8 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
           <Switcher 
             isOpen={isSwitcherOpen} 
             onClose={() => setIsSwitcherOpen(false)} 
+            onNavigationStyleChange={onNavigationStyleChange}
+            currentNavigationStyle={currentNavigationStyle}
           />
         </header>
     </ThemeProvider>

@@ -1,17 +1,18 @@
+// Footer.tsx
 import React from 'react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="footer mt-auto py-3 bg-white text-center">
-      <div className="container">
-        <span>
-          Copyright © <span id="year">{currentYear}</span>{' '}
-          <a href="javascript:void(0);" className="text-primary">Bima</a>.
-          Designed with <span className="bi bi-heart-fill text-danger"></span> by{' '}
-          <a href="javascript:void(0);">
-            <span className="fw-semibold text-decoration-underline"></span>
+    <footer className="bg-gray-800 text-white py-4 mt-auto">
+      <div className="container mx-auto px-4 text-center">
+        <span className="text-sm">
+          Copyright © {currentYear}{' '}
+          <a href="#" className="text-blue-300 hover:text-blue-400">Bima</a>.
+          Designed with ❤️ by{' '}
+          <a href="#" className="text-blue-300 hover:text-blue-400">
+             αzυre project ♪
           </a>{' '}
           All rights reserved
         </span>

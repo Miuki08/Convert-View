@@ -99,9 +99,9 @@ export default function Dashboard() {
         {/* Tasks List */}
         <TasksList />
 
+      </div>
         {/* Footer */}
         <Footer />
-      </div>
     </>
   );
 }
