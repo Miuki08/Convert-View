@@ -25,6 +25,42 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Buttom Sun and Moon */
+/* globals.css */
+.dark {
+  --bg-primary: #1e293b;
+  --bg-secondary: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --border-color: #334155;
+}
+
+.dark body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark .bg-white {
+  background-color: var(--bg-secondary);
+}
+
+.dark .text-gray-800 {
+  color: var(--text-primary);
+}
+
+.dark .text-gray-600 {
+  color: var(--text-secondary);
+}
+
+.dark .border-gray-200 {
+  border-color: var(--border-color);
+}
+
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Animasi Ping Once */
 @keyframes pingOnce {
   0% {
     transform: scale(1);
@@ -68,13 +104,13 @@ body {
   display: none;
 }
 
-/* Menyembunyikan scrollbar untuk IE, Edge dan Firefox */
+/* Menyembunyikan scrollbar */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE dan Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
 
-/* Optional: Pastikan body mengambil full height */
+/* Optional */
 html, body {
   height: 100%;
   margin: 0;
@@ -122,4 +158,193 @@ html, body {
 
 .animate-slide-up {
   animation: slideUp 0.5s ease-out 0.2s both;
+}
+
+/* animations for footer */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.animate-gradient-x {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Hover effects for social icons */
+.group:hover svg {
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+}
+
+/* Tema Gelap */
+.dark {
+  --color-bg-primary: #1a202c;
+  --color-bg-secondary: #2d3748;
+  --color-text-primary: #f7fafc;
+  --color-text-secondary: #e2e8f0;
+  --color-border: #4a5568;
+}
+
+.dark body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.dark .bg-white {
+  background-color: var(--color-bg-secondary);
+}
+
+.dark .text-gray-800 {
+  color: var(--color-text-primary);
+}
+
+.dark .text-gray-600 {
+  color: var(--color-text-secondary);
+}
+
+.dark .border-gray-200 {
+  border-color: var(--color-border);
+}
+
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Dukungan RTL */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .ml-4 {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .mr-3 {
+  margin-right: 0;
+  margin-left: 0.75rem;
+}
+
+[dir="rtl"] .mr-4 {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+/* Scrollbar styling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Animasi */
+.animate-ping-once {
+  animation: ping-once 0.5s ease-in-out;
+}
+
+@keyframes ping-once {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
