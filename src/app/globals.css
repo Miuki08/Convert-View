@@ -47,3 +47,79 @@ body {
 .form-check-input:checked {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 }
+
+/* Mengurangi jarak antara sidebar dan content */
+.main-content {
+  margin-left: 0.5rem !important; 
+}
+
+/* Untuk mode collapsed */
+.sidebar-collapsed ~ .main-content {
+  margin-left: 0.25rem !important;
+}
+
+/* Memastikan content memenuhi ruang yang tersedia */
+.content-wrapper {
+  padding: 0.25rem;
+}
+
+/* Menyembunyikan scrollbar untuk Chrome, Safari dan Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Menyembunyikan scrollbar untuk IE, Edge dan Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE dan Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Optional: Pastikan body mengambil full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Animasi Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Animasi Slide Down */
+@keyframes slideDown {
+  from { 
+    transform: translateY(-20px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* Animasi Slide Up */
+@keyframes slideUp {
+  from { 
+    transform: translateY(20px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out 0.2s both;
+}

@@ -44,10 +44,9 @@ export default function Dashboard() {
   ];
 
   return (
-
-    <>
+    <div className="p-6 animate-fade-in">
       {/* Breadcrumb */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 animate-slide-down">
         <div>
           <h1 className="text-2xl font-semibold text-gray-800">DASHBOARD</h1>
         </div>
@@ -67,26 +66,35 @@ export default function Dashboard() {
       </div>
 
       {/* Welcome Card */}
-      <div className="mb-6">
+      <div className="mb-6 animate-slide-up">
         <WelcomeCard />
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {stats.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
+          <div
+            key={index}
+            className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <StatsCard {...stat} />
+          </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Browser Stats */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div 
+          className="bg-white rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg"
+        >
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Browser Usage</h3>
           <BrowserStats />
         </div>
 
         {/* Project Budget Chart */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div 
+          className="bg-white rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg"
+        >
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Project Budget</h3>
           <ProjectBudgetChart />
         </div>
@@ -94,14 +102,20 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Recent Customers */}
-        <RecentCustomers />
+        <div className="transition-all duration-300 hover:-translate-y-1">
+          <RecentCustomers />
+        </div>
         
         {/* Tasks List */}
-        <TasksList />
-
+        <div className="transition-all duration-300 hover:-translate-y-1">
+          <TasksList />
+        </div>
       </div>
-        {/* Footer */}
+      
+      {/* Footer */}
+      <div>
         <Footer />
-    </>
+      </div>
+    </div>
   );
 }

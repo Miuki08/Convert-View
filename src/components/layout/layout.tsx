@@ -41,7 +41,7 @@ function MainLayout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <div className="flex h-screen bg-white transition-colors duration-300">
       {/* Sidebar */}
       <Sidebar 
         isOpen={sidebarOpen} 
@@ -61,8 +61,8 @@ function MainLayout({ children }: LayoutProps) {
           currentNavigationStyle={navigationStyle}
         />
         
-        {/* Main content - HAPUS padding/margin yang berlebihan */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-0">
+        {/* Main content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-0 scrollbar-hide">
           <div className="w-full h-full">
             {children}
           </div>
