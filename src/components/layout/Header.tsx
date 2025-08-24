@@ -23,6 +23,26 @@ interface HeaderProps {
   onLayoutChange: (layout: 'vertical' | 'horizontal') => void;
   currentDirection: 'ltr' | 'rtl';
   currentLayout: 'vertical' | 'horizontal';
+  onThemeChange: (theme: 'light' | 'dark') => void;
+  currentTheme: 'light' | 'dark';
+  onMenuStyleChange: (style: string) => void;
+  menuStyle: string;
+  onSidemenuLayoutChange: (layout: string) => void;
+  sidemenuLayout: string;
+  onPageStyleChange: (style: string) => void;
+  pageStyle: string;
+  onLayoutWidthChange: (width: string) => void;
+  layoutWidth: string;
+  onMenuPositionChange: (position: string) => void;
+  menuPosition: string;
+  onHeaderPositionChange: (position: string) => void;
+  headerPosition: string;
+  onLoaderChange: (enabled: boolean) => void;
+  loaderEnabled: boolean;
+  onThemeBackgroundChange: (background: string) => void;
+  themeBackground: string;
+  onMenuBackgroundChange: (background: string) => void;
+  menuBackground: string;
 }
 
 export default function Header({ 
@@ -36,7 +56,27 @@ export default function Header({
   onDirectionChange,
   onLayoutChange,
   currentDirection,
-  currentLayout
+  currentLayout,
+  onThemeChange,
+  currentTheme,
+  onMenuStyleChange,
+  menuStyle,
+  onSidemenuLayoutChange,
+  sidemenuLayout,
+  onPageStyleChange,
+  pageStyle,
+  onLayoutWidthChange,
+  layoutWidth,
+  onMenuPositionChange,
+  menuPosition,
+  onHeaderPositionChange,
+  headerPosition,
+  onLoaderChange,
+  loaderEnabled,
+  onThemeBackgroundChange,
+  themeBackground,
+  onMenuBackgroundChange,
+  menuBackground
 }: HeaderProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -587,6 +627,26 @@ export default function Header({
             currentDirection={currentDirection}
             onLayoutChange={onLayoutChange}
             currentLayout={currentLayout}
+            onThemeChange={onThemeChange}
+            currentTheme={currentTheme}
+            onMenuStyleChange={onMenuStyleChange}
+            currentMenuStyle={menuStyle}
+            onSidemenuLayoutChange={onSidemenuLayoutChange}
+            currentSidemenuLayout={sidemenuLayout}
+            onPageStyleChange={onPageStyleChange}
+            currentPageStyle={pageStyle}
+            onLayoutWidthChange={onLayoutWidthChange}
+            currentLayoutWidth={layoutWidth}
+            onMenuPositionChange={onMenuPositionChange}
+            currentMenuPosition={menuPosition}
+            onHeaderPositionChange={onHeaderPositionChange}
+            currentHeaderPosition={headerPosition}
+            onLoaderChange={onLoaderChange}
+            currentLoaderEnabled={loaderEnabled}
+            onThemeBackgroundChange={onThemeBackgroundChange}
+            currentThemeBackground={themeBackground}
+            onMenuBackgroundChange={onMenuBackgroundChange}
+            currentMenuBackground={menuBackground}
           />
         </header>
     </ThemeProvider>
