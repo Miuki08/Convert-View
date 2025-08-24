@@ -196,7 +196,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, navigationStyl
               <span className={`ml-2 text-xl font-bold ${
                 navigationStyle === 'dark' || navigationStyle === 'primary' || navigationStyle === 'gradient' 
                 ? 'text-white' : 'text-blue-600'
-              }`}>YourApp</span>
+              }`}>αzυre</span>
             </Link>
           )}
           {!isCollapsed && (

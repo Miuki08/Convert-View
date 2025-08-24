@@ -4,6 +4,11 @@ import BrowserStats from '../components/dashboard/BrowserStats';
 import ProjectBudgetChart from '../components/dashboard/ProjectBudgetChart';
 import RecentCustomers from '../components/dashboard/RecentCustomers';
 import TasksList from '../components/dashboard/TasksList';
+import WarehouseOperatingCosts from '../components/dashboard/WarehouseOperatingCosts';
+import SalesActivity from '../components/dashboard/SalesActivity';
+import Timeline from '../components/dashboard/Timeline';
+import WeeklyVisitors from '../components/dashboard/WeaklyVisitors';
+import ProductSummaryTable from '../components/dashboard/ProductSummaryTable';
 import Footer from '../components/layout/Footer';
 import { ShoppingBag, DollarSign, ExternalLink, CreditCard } from 'lucide-react';
 
@@ -111,6 +116,18 @@ export default function Dashboard() {
           <TasksList />
         </div>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SalesActivity />
+        <WarehouseOperatingCosts />
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Timeline />
+        <WeeklyVisitors />
+      </div>
+      
+      <ProductSummaryTable />
       
       {/* Footer */}
       <div>
