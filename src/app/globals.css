@@ -358,3 +358,28 @@ html, body {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+/* card change background */
+:root {
+  --color-primary: 59 130 246;
+}
+
+.bg-primary {
+  background-color: rgb(var(--color-primary));
+}
+
+.text-primary {
+  color: rgb(var(--color-primary));
+}
+
+.border-primary {
+  border-color: rgb(var(--color-primary));
+}
+
+.ring-primary {
+  --tw-ring-color: rgb(var(--color-primary));
+}
+
+.hover\:bg-primary:hover {
+  background-color: rgb(var(--color-primary));
+}

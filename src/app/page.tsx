@@ -1,5 +1,5 @@
 import WelcomeCard from '../components/dashboard/WelcomeCard';
-import StatsCard from '../components/dashboard/StatsCard';
+import ClientStatsCard from '../components/dashboard/ClientStatsCard';
 import BrowserStats from '../components/dashboard/BrowserStats';
 import ProjectBudgetChart from '../components/dashboard/ProjectBudgetChart';
 import RecentCustomers from '../components/dashboard/RecentCustomers';
@@ -70,6 +70,7 @@ export default function Dashboard() {
         </nav>
       </div>
 
+
       {/* Welcome Card */}
       <div className="mb-6 animate-slide-up">
         <WelcomeCard />
@@ -82,7 +83,7 @@ export default function Dashboard() {
             key={index}
             className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <StatsCard {...stat} />
+            <ClientStatsCard {...stat} />
           </div>
         ))}
       </div>

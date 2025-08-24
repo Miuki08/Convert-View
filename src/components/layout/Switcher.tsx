@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../common/ThemeContext';
 
 interface SwitcherProps {
   isOpen: boolean;
@@ -67,6 +68,7 @@ const Switcher: React.FC<SwitcherProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('home');
   const [isVisible, setIsVisible] = useState(false);
+  const { setPrimaryColor } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -80,6 +82,7 @@ const Switcher: React.FC<SwitcherProps> = ({
 
   const resetSettings = () => {
     localStorage.removeItem('theme');
+    localStorage.removeItem('primaryColor');
     localStorage.removeItem('sidebarCollapsed');
     localStorage.removeItem('navigationStyle');
     localStorage.removeItem('headerStyle');
@@ -94,6 +97,7 @@ const Switcher: React.FC<SwitcherProps> = ({
     localStorage.removeItem('loaderEnabled');
     localStorage.removeItem('themeBackground');
     localStorage.removeItem('menuBackground');
+    setPrimaryColor('blue');
     window.location.reload();
   };
 
@@ -155,6 +159,21 @@ const Switcher: React.FC<SwitcherProps> = ({
     { id: 'fixed', name: 'Fixed' },
     { id: 'scrollable', name: 'Scrollable' },
   ];
+
+  const handlePrimaryColorChange = (colorId: string) => {
+    const colorMap: Record<string, string> = {
+      'primary-1': 'blue',
+      'primary-2': 'purple',
+      'primary-3': 'green',
+      'primary-4': 'yellow',
+      'primary-5': 'red'
+    };
+    
+    const color = colorMap[colorId] || 'blue';
+    setPrimaryColor(color);
+    
+    onThemeBackgroundChange(colorId);
+  };
 
   return (
     <>
@@ -575,7 +594,7 @@ const Switcher: React.FC<SwitcherProps> = ({
                           className={`w-8 h-8 ${color.color} rounded-full cursor-pointer shadow-md hover:shadow-lg transition-shadow ${
                             currentThemeBackground === color.id ? 'ring-2 ring-blue-500 ring-offset-2' : ''
                           }`}
-                          onClick={() => onThemeBackgroundChange(color.id)}
+                          onClick={() => handlePrimaryColorChange(color.id)}
                           title={color.name}
                         ></div>
                       ))}

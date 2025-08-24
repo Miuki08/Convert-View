@@ -1,3 +1,6 @@
+"use client";
+
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 import { LucideIcon } from 'lucide-react';
 
 interface StatsCardProps {
@@ -8,20 +11,13 @@ interface StatsCardProps {
     value: string;
     isPositive: boolean;
   };
-  iconBg?: string;
-  iconColor?: string;
 }
 
-export default function StatsCard({ 
-  title, 
-  value, 
-  icon: Icon, 
-  trend, 
-  iconBg = 'bg-blue-100', 
-  iconColor = 'text-blue-600' 
-}: StatsCardProps) {
+export default function ClientStatsCard({ title, value, icon: Icon, trend }: StatsCardProps) {
+  const { getColorClasses, getTextColorForBackground } = usePrimaryColor();
+  
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg">
       <div className="flex">
         <div className="flex-1 p-4">
           <p className="text-sm text-gray-500 mb-1">{title}</p>
@@ -34,8 +30,8 @@ export default function StatsCard({
           </p>
         </div>
         <div className="flex items-center justify-center p-4">
-          <div className={`w-12 h-12 rounded-full ${iconBg} flex items-center justify-center`}>
-            <Icon className={`w-6 h-6 ${iconColor}`} />
+          <div className={`w-12 h-12 rounded-full ${getColorClasses('bg')} flex items-center justify-center shadow-md`}>
+            <Icon className={`w-6 h-6 ${getTextColorForBackground(getColorClasses('bg'))}`} />
           </div>
         </div>
       </div>
