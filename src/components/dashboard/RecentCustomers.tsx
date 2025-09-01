@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor'; // Sesuaikan path
 
 interface Customer {
   id: number;
@@ -12,6 +13,9 @@ interface Customer {
 }
 
 const RecentCustomers = () => {
+  const { getColorClasses } = usePrimaryColor();
+  const primaryTextColor = getColorClasses('text');
+  
   const customers: Customer[] = [
     {
       id: 1,
@@ -104,8 +108,8 @@ const RecentCustomers = () => {
   return (
     <div className="rounded-xl overflow-hidden shadow-lg bg-white">
       <div className="p-6 border-b border-gray-100">
-        <h3 className="text-xl font-bold text-gray-800 flex items-center">
-          <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <h3 className={`text-xl font-bold text-gray-800 flex items-center ${primaryTextColor}`}>
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
           Recent Customers
@@ -123,7 +127,7 @@ const RecentCustomers = () => {
                 visibleCustomers.includes(customer.id) 
                   ? 'opacity-100 translate-x-0' 
                   : 'opacity-0 translate-x-6'
-              } hover:bg-blue-50/50 cursor-pointer`}
+              } hover:${getColorClasses('bg').replace('500', '50')} cursor-pointer`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center">
@@ -161,7 +165,7 @@ const RecentCustomers = () => {
       
       {/* View All Button */}
       <div className="p-4 border-t border-gray-100 bg-gray-50/50">
-        <button className="w-full py-2 px-4 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 flex items-center justify-center">
+        <button className={`w-full py-2 px-4 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:${getColorClasses('bg').replace('500', '50')} hover:border-${getColorClasses('border').replace('border-', '')} transition-all duration-200 flex items-center justify-center`}>
           View All Customers
           <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

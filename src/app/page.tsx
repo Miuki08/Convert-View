@@ -16,25 +16,25 @@ export default function Dashboard() {
     {
       title: 'Today Orders',
       value: '5,472',
-      iconName: 'ShoppingBag', // Ubah menjadi string nama icon
+      iconName: 'ShoppingBag',
       trend: { value: '+427', isPositive: true }
     },
     {
       title: 'Today Earnings',
       value: '$7,589',
-      iconName: 'DollarSign', // Ubah menjadi string nama icon
+      iconName: 'DollarSign',
       trend: { value: '-453', isPositive: false }
     },
     {
       title: 'Profit Gain',
       value: '$8,943',
-      iconName: 'ExternalLink', // Ubah menjadi string nama icon
+      iconName: 'ExternalLink',
       trend: { value: '+788', isPositive: true }
     },
     {
       title: 'Total Earnings',
       value: '$57.2M',
-      iconName: 'CreditCard', // Ubah menjadi string nama icon
+      iconName: 'CreditCard',
       trend: { value: '-693', isPositive: false }
     }
   ];
@@ -108,17 +108,40 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SalesActivity />
-        <WarehouseOperatingCosts />
+      {/* Sales Activity */}
+      <div className="mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
+          <SalesActivity />
+        </div>
+      </div>
+
+      {/* Warehouse Operating Costs */}
+      <div className="mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
+          <WarehouseOperatingCosts />
+        </div>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Timeline />
-        <WeeklyVisitors />
+      {/* Timeline */}
+      <div className="mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
+          <Timeline />
+        </div>
+      </div>
+
+      {/* Weekly Visitors */}
+      <div className="mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
+          <WeeklyVisitors />
+        </div>
       </div>
       
-      <ProductSummaryTable />
+      {/* Product Summary Table */}
+      <div className="mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
+          <ProductSummaryTable />
+        </div>
+      </div>
       
       {/* Footer */}
       <div>

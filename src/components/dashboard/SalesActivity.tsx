@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface SalesActivityItem {
   country: string;
@@ -30,7 +31,7 @@ const CountryFlag = ({ country }: { country: string }) => {
     BR: 'bg-yellow-500',// Brazil
     US: 'bg-blue-600',  // United States
     DE: 'bg-yellow-400',// Germany
-    UA: 'bg-green-400', // U.A.E (using UAE's green)
+    UA: 'bg-green-400', // U.A.E
   };
 
   const defaultColor = 'bg-purple-500';
@@ -55,6 +56,7 @@ const TrendIcon = ({ isPositive }: { isPositive: boolean }) => (
 );
 
 const SalesActivity: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
   const [isVisible, setIsVisible] = useState(false);
   const [progressAnimation, setProgressAnimation] = useState<number[]>([]);
 
@@ -76,7 +78,7 @@ const SalesActivity: React.FC = () => {
       percentage: '65%',
       trend: { isPositive: false },
       progress: 65,
-      color: 'bg-gradient-to-r from-blue-500 to-blue-600'
+      color: `bg-gradient-to-r ${getColorClasses('bg')} ${getColorClasses('bg').replace('bg-', 'to-')}-600`
     },
     {
       country: 'Russia',
@@ -84,7 +86,7 @@ const SalesActivity: React.FC = () => {
       percentage: '55%',
       trend: { isPositive: true },
       progress: 55,
-      color: 'bg-gradient-to-r from-blue-400 to-blue-500'
+      color: `bg-gradient-to-r ${getColorClasses('bg')} ${getColorClasses('bg').replace('bg-', 'to-')}-500`
     },
     {
       country: 'Canada',
@@ -131,8 +133,8 @@ const SalesActivity: React.FC = () => {
   return (
     <div className={`bg-white rounded-xl shadow-lg p-6 transition-all duration-500 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} hover:shadow-xl relative overflow-hidden`}>
       {/* Animated decorative elements */}
-      <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-100 rounded-full opacity-30 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-16 h-16 bg-purple-100 rounded-full opacity-30 animate-pulse" style={{animationDelay: '1s'}}></div>
+      <div className={`absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 ${getColorClasses('bg')} bg-opacity-30 rounded-full opacity-30 animate-pulse`}></div>
+      <div className={`absolute bottom-0 left-0 -mb-4 -ml-4 w-16 h-16 ${getColorClasses('bg')} bg-opacity-30 rounded-full opacity-30 animate-pulse`} style={{animationDelay: '1s'}}></div>
       
       <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
         <ChartIcon />

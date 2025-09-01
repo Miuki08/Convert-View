@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface CostItem {
   name: string;
@@ -14,6 +15,7 @@ interface CostItem {
 }
 
 const WarehouseOperatingCosts: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
   const [isVisible, setIsVisible] = useState(false);
   const [animatedProgress, setAnimatedProgress] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,14 +44,14 @@ const WarehouseOperatingCosts: React.FC = () => {
       value: '3,876',
       trend: { value: '03%', isPositive: true },
       progress: 60,
-      color: 'from-blue-500 to-blue-600'
+      color: `${getColorClasses('bg')} ${getColorClasses('bg').replace('bg-', 'to-')}-600`
     },
     {
       name: 'Storage',
       value: '2,178',
       trend: { value: '16%', isPositive: false },
       progress: 50,
-      color: 'from-blue-400 to-blue-500'
+      color: `${getColorClasses('bg')} ${getColorClasses('bg').replace('bg-', 'to-')}-500`
     },
     {
       name: 'Shipping',
@@ -79,7 +81,7 @@ const WarehouseOperatingCosts: React.FC = () => {
       progress: 85,
       color: 'from-teal-500 to-teal-600'
     }
-  ], []);
+  ], [getColorClasses]);
 
   // Animate progress bars one by one
   useEffect(() => {
@@ -134,7 +136,7 @@ const WarehouseOperatingCosts: React.FC = () => {
     >
       <div className="flex items-center justify-between mb-6 pb-3 border-b border-gray-100">
         <h3 className="text-xl font-bold text-gray-800">Warehouse Operating Costs</h3>
-        <div className="animate-pulse bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+        <div className={`animate-pulse ${getColorClasses('bg')} bg-opacity-20 ${getColorClasses('text')} text-xs font-semibold px-2.5 py-1 rounded-full`}>
           Live
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface Product {
   id: number;
@@ -15,6 +16,7 @@ interface Product {
 }
 
 const ProductSummaryTable: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
   const [sortBy, setSortBy] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -39,7 +41,7 @@ const ProductSummaryTable: React.FC = () => {
       productCost: '$30,000',
       paymentMode: 'Cash on delivered',
       status: 'Add Cart',
-      statusColor: 'bg-blue-100 text-blue-800'
+      statusColor: `${getColorClasses('bg')} bg-opacity-20 ${getColorClasses('text')}`
     },
     {
       id: 3,
@@ -94,7 +96,7 @@ const ProductSummaryTable: React.FC = () => {
       productCost: '$4,700',
       paymentMode: 'Online Payment',
       status: 'Add to Cart',
-      statusColor: 'bg-blue-100 text-blue-800'
+      statusColor: `${getColorClasses('bg')} bg-opacity-20 ${getColorClasses('text')}`
     },
     {
       id: 8,
@@ -140,12 +142,12 @@ const ProductSummaryTable: React.FC = () => {
           <input
             type="text"
             placeholder="Search Here"
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:${getColorClasses('ring')}`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="relative">
-            <button className="px-3 py-2 bg-blue-500 text-white rounded-md text-sm flex items-center">
+            <button className={`px-3 py-2 ${getColorClasses('bg')} text-white rounded-md text-sm flex items-center`}>
               Sort By <span className="ml-1">▼</span>
             </button>
             <div className="absolute right-0 mt-1 w-40 bg-white rounded-md shadow-lg py-1 z-10 hidden">

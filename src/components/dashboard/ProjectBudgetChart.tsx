@@ -2,8 +2,12 @@
 
 import React from 'react';
 import Chart from 'react-apexcharts';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 const ProjectBudgetChart: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
+  const primaryColor = getColorClasses('bg').replace('bg-', '');
+
   const options = {
     chart: {
       height: 350,
@@ -22,7 +26,7 @@ const ProjectBudgetChart: React.FC = () => {
       curve: 'smooth' as const,
       width: 3
     },
-    colors: ['#5b67c7'],
+    colors: [getComputedStyle(document.documentElement).getPropertyValue(`--color-${primaryColor}`) || '#5b67c7'],
     grid: {
       borderColor: '#f2f6f7',
     },

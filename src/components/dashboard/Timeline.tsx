@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface TimelineItem {
   date: string;
@@ -8,12 +11,14 @@ interface TimelineItem {
 }
 
 const Timeline: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
+  
   const items: TimelineItem[] = [
     {
       date: '23 Sep, 2021',
       title: 'Anita Letterback',
       description: 'Lorem ipsum dolor tempor incididunt.',
-      color: 'bg-red-500'
+      color: getColorClasses('bg')
     },
     {
       date: '16 Aug, 2021',
@@ -49,7 +54,7 @@ const Timeline: React.FC = () => {
       date: '23 Sep, 2021',
       title: 'Anita Letterback',
       description: 'Lorem ipsum dolor tempor incididunt.',
-      color: 'bg-red-500'
+      color: getColorClasses('bg')
     }
   ];
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface Task {
   id: number;
@@ -13,6 +14,7 @@ interface Task {
 }
 
 const TasksList: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: 1,
@@ -94,7 +96,7 @@ const TasksList: React.FC = () => {
 
   const getBadgeColorClass = (color: string) => {
     const colorMap: Record<string, string> = {
-      primary: "bg-blue-100 text-blue-800",
+      primary: `${getColorClasses('bg')} ${getColorClasses('text')}`,
       light: "bg-gray-100 text-gray-800"
     };
     return colorMap[color] || "bg-gray-100 text-gray-800";
@@ -104,7 +106,7 @@ const TasksList: React.FC = () => {
     <div className="rounded-xl overflow-hidden shadow-lg bg-white">
       <div className="p-6 border-b border-gray-100">
         <h3 className="text-xl font-bold text-gray-800 flex items-center">
-          <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg className={`w-5 h-5 mr-2 ${getColorClasses('text')}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
           MAIN TASKS
@@ -120,19 +122,19 @@ const TasksList: React.FC = () => {
                 visibleTasks.includes(task.id) 
                   ? 'opacity-100 translate-x-0' 
                   : 'opacity-0 translate-x-6'
-              } ${task.completed ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+              } ${task.completed ? `${getColorClasses('bg')} bg-opacity-10` : 'hover:bg-gray-50'}`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center flex-1 min-w-0">
                 <div className="relative">
                   <input
-                    className="form-check-input h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer transition-all duration-200"
+                    className={`form-check-input h-5 w-5 ${getColorClasses('text')} rounded border-gray-300 focus:${getColorClasses('ring')} focus:ring-2 cursor-pointer transition-all duration-200`}
                     type="checkbox"
                     checked={task.completed}
                     onChange={() => toggleTask(task.id)}
                   />
                   {task.completed && (
-                    <div className="absolute inset-0 flex items-center justify-center text-white bg-blue-600 rounded border-blue-600 animate-ping-once">
+                    <div className={`absolute inset-0 flex items-center justify-center text-white ${getColorClasses('bg')} rounded border-${getColorClasses('border')} animate-ping-once`}>
                       <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
@@ -166,9 +168,9 @@ const TasksList: React.FC = () => {
           <input 
             type="text" 
             placeholder="Add new task..." 
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:${getColorClasses('ring')} focus:border-transparent`}
           />
-          <button className="ml-2 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+          <button className={`ml-2 ${getColorClasses('bg')} text-white p-2 rounded-lg ${getColorClasses('hover')} transition-colors duration-200`}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>

@@ -1,6 +1,11 @@
+"use client";
+
 import React from 'react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 const WeeklyVisitors: React.FC = () => {
+  const { getColorClasses } = usePrimaryColor();
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 transition-all duration-300 hover:shadow-lg">
       <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Visitors</h3>
@@ -33,13 +38,13 @@ const WeeklyVisitors: React.FC = () => {
       <div className="bg-gray-100 p-4 rounded-lg">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm text-gray-600">Visitor Statistics Chart</span>
-          <button className="text-blue-500 text-sm font-semibold">View Report</button>
+          <button className={`${getColorClasses('text')} text-sm font-semibold`}>View Report</button>
         </div>
         <div className="h-48 flex items-end justify-between pt-4">
           {[40, 65, 50, 75, 60, 45, 70].map((height, index) => (
             <div key={index} className="flex flex-col items-center">
               <div 
-                className={`w-8 rounded-t ${index % 2 === 0 ? 'bg-blue-500' : 'bg-pink-400'}`}
+                className={`w-8 rounded-t ${index % 2 === 0 ? getColorClasses('bg') : 'bg-pink-400'}`}
                 style={{ height: `${height}%` }}
               ></div>
               <span className="text-xs text-gray-500 mt-1">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index]}</span>

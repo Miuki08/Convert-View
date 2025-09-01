@@ -1,4 +1,5 @@
 import { LucideIcon } from 'lucide-react';
+import { usePrimaryColor } from '../hooks/usePrimaryColor';
 
 interface StatsCardProps {
   title: string;
@@ -17,9 +18,15 @@ export default function StatsCard({
   value, 
   icon: Icon, 
   trend, 
-  iconBg = 'bg-blue-100', 
-  iconColor = 'text-blue-600' 
+  iconBg, 
+  iconColor 
 }: StatsCardProps) {
+  const { getColorClasses } = usePrimaryColor();
+  
+  // Gunakan warna primer jika tidak ada nilai custom
+  const defaultIconBg = `${getColorClasses('bg').replace('500', '100')}`;
+  const defaultIconColor = getColorClasses('text');
+
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
       <div className="flex">
@@ -34,8 +41,8 @@ export default function StatsCard({
           </p>
         </div>
         <div className="flex items-center justify-center p-4">
-          <div className={`w-12 h-12 rounded-full ${iconBg} flex items-center justify-center`}>
-            <Icon className={`w-6 h-6 ${iconColor}`} />
+          <div className={`w-12 h-12 rounded-full ${iconBg || defaultIconBg} flex items-center justify-center`}>
+            <Icon className={`w-6 h-6 ${iconColor || defaultIconColor}`} />
           </div>
         </div>
       </div>
