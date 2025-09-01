@@ -1,13 +1,15 @@
-// hooks/usePrimaryColor.ts
 "use client";
 
-import { useTheme } from '../common/ThemeContext';
+import { useThemeSafe } from '../common/ThemeContext';
 
 export const usePrimaryColor = () => {
-  const { primaryColor } = useTheme();
+  const themeContext = useThemeSafe();
+
+  const primaryColor = themeContext?.primaryColor || 'blue';
+  const themeBackground = themeContext?.themeBackground || 'primary-1';
   
   // Return color classes based on primary color
-  const getColorClasses = (type: 'bg' | 'text' | 'border' | 'hover' | 'ring') => {
+ const getColorClasses = (type: 'bg' | 'text' | 'border' | 'hover' | 'ring') => {
     const colorMap: Record<string, Record<string, string>> = {
       blue: {
         bg: 'bg-blue-500',
@@ -49,29 +51,70 @@ export const usePrimaryColor = () => {
     return colorMap[primaryColor]?.[type] || colorMap.blue[type];
   };
   
-  // Function to determine text color based on background
-  const getTextColorForBackground = (bgColorClass: string) => {
-    const lightTextColors = [
-      'bg-blue-500', 'bg-purple-500', 'bg-green-500', 'bg-red-500',
-      'bg-blue-600', 'bg-purple-600', 'bg-green-600', 'bg-red-600'
-    ];
+  // Function to determine text color based on background color value (not class)
+  const getTextColorForBackground = (bgColorValue: string) => {
+    // Extract the actual color from class names like 'bg-blue-500'
+    const getColorFromClass = (colorClass: string) => {
+      const match = colorClass.match(/bg-(.+)-(\d+)/);
+      if (match) return { color: match[1], shade: parseInt(match[2]) };
+      return null;
+    };
     
-    const darkTextColors = [
-      'bg-yellow-500', 'bg-yellow-400', 'bg-gray-100', 'bg-white'
-    ];
+    const colorInfo = getColorFromClass(bgColorValue);
+    if (!colorInfo) return 'text-gray-800'; // Default
     
-    if (lightTextColors.includes(bgColorClass)) {
-      return 'text-white';
-    } else if (darkTextColors.includes(bgColorClass)) {
-      return 'text-gray-900';
-    }
+    const { color, shade } = colorInfo;
     
-    return 'text-white';
+    // Colors that need light text (dark backgrounds)
+    const darkColors = ['blue', 'purple', 'green', 'red', 'gray', 'black'];
+    const needsLightText = 
+      (darkColors.includes(color) && shade >= 500) || 
+      (color === 'gray' && shade >= 700) ||
+      color === 'black';
+    
+    // Colors that need dark text (light backgrounds)
+    const lightColors = ['yellow', 'white'];
+    const needsDarkText = 
+      (lightColors.includes(color) && shade <= 500) || 
+      (color === 'gray' && shade <= 400) ||
+      color === 'white';
+    
+    if (needsLightText) return 'text-white';
+    if (needsDarkText) return 'text-gray-900';
+    
+    return 'text-gray-800'; // Default
+  };
+  
+  // Get the actual color value from theme background
+  const getThemeBackgroundValue = () => {
+    const backgroundMap: Record<string, string> = {
+      'primary-1': getColorClasses('bg'),
+      'primary-2': 'bg-purple-500',
+      'primary-3': 'bg-green-500',
+      'primary-4': 'bg-yellow-500',
+      'primary-5': 'bg-red-500',
+      'bg-1': 'bg-gray-100',
+      'bg-2': 'bg-gray-200',
+      'bg-3': 'bg-gray-300',
+      'bg-4': 'bg-gray-400',
+      'bg-5': 'bg-gray-500'
+    };
+    
+    return backgroundMap[themeBackground] || getColorClasses('bg');
+  };
+  
+  // Helper to get text color for theme background
+  const getTextColorForThemeBackground = () => {
+    const bgClass = getThemeBackgroundValue();
+    return getTextColorForBackground(bgClass);
   };
   
   return {
     primaryColor,
+    themeBackground,
     getColorClasses,
-    getTextColorForBackground
+    getTextColorForBackground,
+    getThemeBackgroundValue,
+    getTextColorForThemeBackground
   };
 };

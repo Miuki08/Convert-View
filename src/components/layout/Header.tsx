@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Switcher from './Switcher';
 import Image from 'next/image';
 import Link from 'next/link'; 
-import { ThemeProvider } from '../common/ThemeContext';
 import { 
   Bell, ShoppingCart, Search, Sun, Moon, 
   Maximize, Minimize, Grid, User, Settings, LogOut, Menu,
@@ -174,7 +173,6 @@ export default function Header({
   };
 
   return (
-    <ThemeProvider>
         <header className={getHeaderClasses()}>
           <div className="flex items-center justify-between h-16 px-4">
             {/* Left section */}
@@ -649,6 +647,5 @@ export default function Header({
             currentMenuBackground={menuBackground}
           />
         </header>
-    </ThemeProvider>
   );
 }

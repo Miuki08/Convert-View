@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../common/ThemeContext';
+import { useThemeSafe } from '../common/ThemeContext';
+
 
 interface SwitcherProps {
   isOpen: boolean;
@@ -68,7 +71,9 @@ const Switcher: React.FC<SwitcherProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('home');
   const [isVisible, setIsVisible] = useState(false);
-  const { setPrimaryColor } = useTheme();
+  const themeContext = useThemeSafe();
+  const setPrimaryColor = themeContext?.setPrimaryColor || (() => {});
+  const setThemeBackground = themeContext?.setThemeBackground || (() => {});
 
   useEffect(() => {
     if (isOpen) {
@@ -97,7 +102,12 @@ const Switcher: React.FC<SwitcherProps> = ({
     localStorage.removeItem('loaderEnabled');
     localStorage.removeItem('themeBackground');
     localStorage.removeItem('menuBackground');
-    setPrimaryColor('blue');
+    
+    if (themeContext) {
+      setPrimaryColor('blue');
+      setThemeBackground('primary-1');
+    }
+    
     window.location.reload();
   };
 
@@ -105,11 +115,11 @@ const Switcher: React.FC<SwitcherProps> = ({
 
   // Color palette options
   const colorOptions = [
-    { id: 'primary-1', name: 'Primary 1', color: 'bg-blue-500' },
-    { id: 'primary-2', name: 'Primary 2', color: 'bg-purple-500' },
-    { id: 'primary-3', name: 'Primary 3', color: 'bg-green-500' },
-    { id: 'primary-4', name: 'Primary 4', color: 'bg-yellow-500' },
-    { id: 'primary-5', name: 'Primary 5', color: 'bg-red-500' },
+    { id: 'primary-1', name: 'Primary 1', color: 'bg-blue-500', value: 'blue' },
+    { id: 'primary-2', name: 'Primary 2', color: 'bg-purple-500', value: 'purple' },
+    { id: 'primary-3', name: 'Primary 3', color: 'bg-green-500', value: 'green' },
+    { id: 'primary-4', name: 'Primary 4', color: 'bg-yellow-500', value: 'yellow' },
+    { id: 'primary-5', name: 'Primary 5', color: 'bg-red-500', value: 'red' },
   ];
 
   const bgColorOptions = [
@@ -161,18 +171,12 @@ const Switcher: React.FC<SwitcherProps> = ({
   ];
 
   const handlePrimaryColorChange = (colorId: string) => {
-    const colorMap: Record<string, string> = {
-      'primary-1': 'blue',
-      'primary-2': 'purple',
-      'primary-3': 'green',
-      'primary-4': 'yellow',
-      'primary-5': 'red'
-    };
-    
-    const color = colorMap[colorId] || 'blue';
-    setPrimaryColor(color);
-    
-    onThemeBackgroundChange(colorId);
+    const colorOption = colorOptions.find(option => option.id === colorId);
+    if (colorOption) {
+      setPrimaryColor(colorOption.value);
+      onThemeBackgroundChange(colorId);
+      setThemeBackground(colorId);
+    }
   };
 
   return (
